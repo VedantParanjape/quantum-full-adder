@@ -1,5 +1,6 @@
 import random
 import sys
+import time
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 
@@ -44,10 +45,13 @@ def check(n, x, y):
 
 # test groups
 def test_exhaustive(n):
-    total = (2 ** (n+1))
-    print(f"  Exhaustive n={n} ({total} pairs) ... ", end="", flush=True)
-    passed = all(check(n, x, y) for x in range(2**n) for y in range(2**n))
-    print("PASS" if passed else "FAIL")
+    pairs = [(x, y) for x in range(2**n) for y in range(2**n)]
+    print(f"  Exhaustive n={n} ({len(pairs)} pairs) ... ", end="", flush=True)
+    t0 = time.time()
+    passed = all(check(n, x, y) for x, y in pairs)
+    elapsed = time.time() - t0
+    avg = elapsed / len(pairs)
+    print(f"{'PASS' if passed else 'FAIL'}  ({elapsed:.2f}s total, {avg:.3f}s/pair)")
     return passed
 
 
@@ -55,8 +59,11 @@ def test_boundary(n):
     hi = 2**n - 1
     cases = [(0, 0), (0, hi), (hi, 0), (2**(n-1), 2**(n-1)), (hi, hi)]
     print(f"  Boundary  n={n} ({len(cases)} cases) ... ", end="", flush=True)
+    t0 = time.time()
     passed = all(check(n, x, y) for x, y in cases)
-    print("PASS" if passed else "FAIL")
+    elapsed = time.time() - t0
+    avg = elapsed / len(cases)
+    print(f"{'PASS' if passed else 'FAIL'}  ({elapsed:.2f}s total, {avg:.3f}s/pair)")
     return passed
 
 
@@ -65,8 +72,11 @@ def test_random(n, k=30):
     hi = 2**n - 1
     pairs = [(rng.randint(0, hi), rng.randint(0, hi)) for _ in range(k)]
     print(f"  Random    n={n} ({k} pairs) ... ", end="", flush=True)
+    t0 = time.time()
     passed = all(check(n, x, y) for x, y in pairs)
-    print("PASS" if passed else "FAIL")
+    elapsed = time.time() - t0
+    avg = elapsed / k
+    print(f"{'PASS' if passed else 'FAIL'}  ({elapsed:.2f}s total, {avg:.3f}s/pair)")
     return passed
 
 if __name__ == "__main__":
