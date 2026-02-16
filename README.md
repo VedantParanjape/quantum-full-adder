@@ -14,6 +14,7 @@ for n-bit unsigned integers x, y with 0 ≤ x, y < 2ⁿ (so x+y < 2ⁿ⁺¹ — 
 
 ```bash
 source .venv/bin/activate
+pip3 install -r requirements.txt
 python test_quantum_adder.py
 ```
 
