@@ -10,9 +10,9 @@ def build_adder_circuit(n: int):
 
     == Return ==
     qc        : QuantumCircuit
-    x_reg     : QuantumRegister  — read-only, unchanged by the circuit
-    y_reg     : QuantumRegister  — overwritten with x + y
-    carry_reg : QuantumRegister  — ancilla, starts and ends at |0⟩
+    x_reg     : QuantumRegister  — untouched by the circuit
+    y_reg     : QuantumRegister  — overwritten by x + y
+    carry_reg : QuantumRegister  — ancillary qubits, starts and ends at |0⟩
     """
     m = n + 1  # qubits per data register
 
